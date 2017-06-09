@@ -2,9 +2,9 @@
 --------Storage Manager CS - 525 -----------------------
 
 
-Kavya Goli          - A20378676
-Nivedita Merla      - A20391011
-Sohan Manohar Patil - A20388048
+Kavya Goli          - A20378676 -----------
+Nivedita Merla      - A20391011 -----------
+Sohan Manohar Patil - A20388048 -----------
 
 
 --------------------------------------------------------
