@@ -66,7 +66,7 @@ readLastBlock
 3. After successful reading of first block return RC_OK. 
 
 writeBlock
-1..Check if the pageNum passed as parameter to this function is greater than totalNumPages stored in file handle. If it’s greater then return error RC_WRITE_FAILED.
+1. Check if the pageNum passed as parameter to this function is greater than totalNumPages stored in file handle. If it’s greater then return error RC_WRITE_FAILED.
 2. If pageNum is smaller or equal to totalNumPage then move the file pointer to desire position to write a block.
 3. Write a block of size PAGE_SIZE stored in the memory pointed to by the memPage page handle.
 4. Update the curPagePos field.
