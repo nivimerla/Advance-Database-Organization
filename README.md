@@ -1,109 +1,91 @@
-# Advance-Database-Organization
---------Storage Manager CS - 525 -----------------------
+
+*********************Asignment-1:Storage Manager*******************
 
 
---------Kavya Goli          - A20392402 -----------
-Nivedita Merla      - A20391011 -----------
-Sohan Manohar Patil - A20388048 ---------
+*Kavya Goli            - A20378676
+*Nivedita Merla     - A20391011
+*Sohan Manohar Patil - A20389075
 
+/***************************************************************************************
+************Function Description******************
+***************************************************************************************/
+createPageFile
+1. Create a new page file using fopen function by name pointed by fileName pointer.
+2. Check if the file pointer fp is properly initialized.
+3. Fill this single page with ’\0’ bytes.
+4. Close the file.
 
---------------------------------------------------------
+openPageFile 
+1. Opens an existing page file and if the file does not exist return RC_FILE_NOT_FOUND.
+2. If opening this file is successful, then initialise all fields of file handle with information about the opened file.
+3. After successful initialization, return RC_OK. 
 
-Function Description :
+closePageFile
+1. Close a page file opened in openPageFile function.
+2. After successful closing of file return RC_OK.
 
-1. Fucntions to manipulate page file(Create,Open,Close,Destroy)
+destroyPageFile
+1. Deletes a page file pointed to by fileName.
+2. After successful deletion of file return RC_OK. 
 
-a) createPageFile():
-      - Creates a new page file of 1 page(PAGE_SIZE) and fills it with '\0' bytes.
-      - In this function we are using fopen() function to create the file.
-      - The file is opened in the write mode so that we can fill it with '\0' bytes.
+readBlock
+1. Check if the pageNum passed as parameter to this function is greater than totalNumPages stored in file handle. If it’s greater then return error RC_READ_NON_EXISTING_PAGE.
+2. If pageNum is smaller or equal to totalNumPage then move the file pointer to desire position to read pageNumth block.
+3.Read the pageNumth block and store its content in the memory pointed to by the memPage page handle.
+4. Update the curPagePos field.
+5. After successful reading return RC_OK.
 
-b) openPageFile():
-      - Checks if the input file is present.
-      - If file is present then opens the existing file or else throws an error RC_FILE_NOT_FOUND.
-      - We are calculating the total number of pages by pointing the file pointer to end and then dividing it by the page size. 
-      - After that we are updating the file handle with file name, total number of pages and current page position.
-      
-c) closePageFile():
-      - Closes the already opened page file.
-      - Returns RC_OK if file closes successfully else returns RC_FILE_NOT_FOUND.
+getBlockPos
+1. Return current page position in file.
 
-d) destroyPageFile():
-      - Destroys already created page file.
-      - We are using remove function to destroy the file.
-      - Returns RC_OK if file destroyed successfully else returns RC_FILE_NOT_FOUND. 
+readFirstBlock
+1. Move the file pointer to the beginning of the file using fseek.
+2. Read the first block of size PAGE_SIZE.
+3. Update the curPagePos field. 
+4. After successful reading of first block return RC_OK.
 
-------------------------------------------------------------------------------------
-2. Read functions :
+readPreviousBlock
+1. Check if the curPagePos is greater than 0. If its not then return error RC_READ_NON_EXISTING_PAGE.
+2. If curPagePos is valid, then move the file pointer to desire position.
+3. Read the previous block and update the curPagePos.
+4. After successful reading of block return RC_OK.
 
-a) readBlock():
-      - Checks if the total number of pages are not greater than the page number(pageNum) from where to read.
-      - If it is greater then throws an error.
-      - Else we will set the pointer position to the page which we have to read.
-      - then we read the block.
-      - And then we set the current page position to the page number that we read.
+readCurrentBlock
+1. Move the file pointer to current block.
+2. Read the current block and update the curPagePos field.
+3. After successful reading of current block return RC_OK.
 
-b) getBlockPos():
-      - Returning the current page position in the page file by using the data structure object fHandle.
+readNextBlock
+1. Check if the curPagePos is not pointing to last page. If it is, then return error RC_READ_NON_EXISTING_PAGE.
+2. If curPagePos is valid, then move the file pointer to desire position to read next block.
+3. Read the next block and update the curPagePos field.
+4. After successful reading of block return RC_OK.
 
-c) readFirstBlock():
-      - Checks if the data structure fHandle contains the values or not.
-      - If it does then checks if the total number of pages are greater than 0.
-      - If, then read the first block of the file.
-      - And set the current page position to first block i.e. 0.
+readLastBlock
+1. Move the file pointer to last block using fseek.
+2. Read the last block and update the curPagePos field.
+3. After successful reading of first block return RC_OK. 
 
-d) readPreviousBlock():
-      - Checks if the data structure fHandle contains the values or not.
-      - If it does then setting the pointer position to the previous page position.
-      - If previous page position is out of boundry then throws an error.
-      - Else reading the previous block of the file.
-      - And setting the current page position to the previous block.
+writeBlock
+1..Check if the pageNum passed as parameter to this function is greater than totalNumPages stored in file handle. If it’s greater then return error RC_WRITE_FAILED.
+2. If pageNum is smaller or equal to totalNumPage then move the file pointer to desire position to write a block.
+3. Write a block of size PAGE_SIZE stored in the memory pointed to by the memPage page handle.
+4. Update the curPagePos field.
+5. After successful writing return RC_OK.
 
-e) readCurrentBlock():
-      - Checks if the data structure fHandle contains the values or not.
-      - If it does then getting the current page position by calling the getBlockPos() function.
-      - And then reading the current page of the file.
-      - After that setting the current page position the the current block.
+writeCurrentBlock
+1. Move the file pointer to current page position.
+2. Write a block and update the curPagePos field.
+3. After successful writing of current block return RC_OK.
 
-f) readNextBlock():
-      - Checks if the data structure fHandle contains the values or not.
-      - If it does then setting the pointer position to the next page position.
-      - If the next block is not out of boundry.
-      - then, reading the next block of the file.
-      - And setting the current page position to the next block.
+appendEmptyBlock
+1. Append a new page file at the end of already opened page file.
+2. Fill this new page with zero bytes.
+3. Update the file handle fields.
+4. Return RC_OK.
 
-g) readLastBlock():
-      - Checks if the data structure fHandle contains the values or not.
-      - If it does then setting the pointer position to the last page position.
-      - Reading the last block of the file.
-      - And setting the current page position to the last block.
+ensureCapacity
+1. Check if the numberOfPages passed as parameter to this method is greater than totalNumPages of opened file.
+2. If it is greater, then increase the totalNumPages of opened file to numberOfPages by appending empty block to file.
+3. After increasing the capacity return RC_OK.
 
--------------------------------------------------------------------------------------------------------------
-
-3. Write Functions
-
-a) writeBlock():
-      - Checks if the page number where to write is not less than 0 or not greater than total number of pages.
-      - If not, then checks the data structure fHandle contains the values or not.
-      - If it is Null then throws an error.
-      - Else we will set the pointer position to the page where we have to write.
-      - then we write the block at page number(pageNum).
-      - And then we set the current page position to the page number that we just write.
-      - Then we update the total number of pages.
-
-b)writeCurrentBlock():      
-      - First we get the current page position by calling the getBlockPos().
-      - then we call the writeBlock() function by passing the current position in its arguments.
-      - If current block is successfully written then we return RC_OK.
-      - Else we return RC_WRITE_FAILED.
-
-c)appendEmptyBlock():
-      - Checks if the data structure fHandle contains the values or not.
-      - if it does, then we create a buffer of PAGE_SIZE.
-      - then we point the position of the file pointer to the end and we write an empty block there.
-      - then we are updating the total number of pages and current page position.
-    
-d)ensureCapacity():
-      - First we check if the total number of pages are less than the number of pages(numberOfPages) passed in the function argument.
-      - If it is less, then we find how many pages we have to add.
-      - we then create the remaining number of pages by running a loop and calling the appendEmptyBlock() function in the loop.
