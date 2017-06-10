@@ -6,7 +6,8 @@
 *Nivedita Merla     - A20391011
 *Sohan Manohar Patil - A20389075
 
-**************Function Description**************
+**************Function Description***************
+
 createPageFile
 1. Create a new page file using fopen function by name pointed by fileName pointer.
 2. Check if the file pointer fp is properly initialized.
